@@ -1,0 +1,207 @@
+/*
+ * bag_implementation.template
+ *
+ *  Created on: 19 set 2023
+ *      Author: salva
+ */
+
+#include <cassert>
+#include<cstdlib>
+#include "bag.h"
+#include "node.h"
+
+using namespace std;
+
+
+typedef std::size_t size_type;
+
+template <class item>
+BAG::bag<item>::bag()
+{
+	head_ptr=NULL;
+	many_nodes=0;
+}
+//Costruttore vuoto
+
+
+
+template <class item>
+BAG::bag<item>::bag(const BAG::bag<item>& source)
+{
+	linked_list::node<item>* tail_ptr;
+	linked_list::list_copy(source.head_ptr, head_ptr,tail_ptr);
+	many_nodes=source.many_nodes;
+}
+//Costruttore di copia
+
+
+
+template <class item>
+BAG::bag<item>::~bag()
+{
+	linked_list::list_clear(head_ptr);
+	many_nodes=0;
+}
+//Distruttore
+
+
+
+template <class item>
+size_type BAG::bag<item>::count(const item& target) const
+{
+	BAG::bag<item>::size_type answer;
+	const linked_list::node<item>* cursor;
+
+	answer=0;
+	cursor=linked_list::list_search(head_ptr, target);
+
+	while(cursor != NULL)
+	{
+		++answer;
+		cursor=cursor->link();
+		cursor = linked_list::list_search(cursor, target);
+	}
+
+	return answer;
+}
+//PRECONDITION: target deve essere un elemento della bag
+//POSTCONDITION: restituisce il numero di copie di target
+
+
+
+template <class item>
+item BAG::bag<item>::grab() const
+{
+	size_type i;
+	linked_list::node<item>* cursor;
+
+	assert(size()>0);
+	i=(rand()% size())+1;
+	cursor=linked_list::list_locate(head_ptr, i);
+	return cursor->data();
+}
+//POSTCONDITION: restituisce un elemento a caso della bag
+
+
+
+template <class item>
+size_type BAG::bag<item>::erase(const item& target)
+{
+	int answer=0;
+	linked_list::node<item>* target_ptr;
+
+	target_ptr=linked_list::list_search(head_ptr, target);
+
+	while(target_ptr != NULL)
+	{
+		target_ptr->set_data(head_ptr->data());
+		target_ptr=target_ptr->link();
+		target_ptr=linked_list::list_search(target_ptr, target);
+
+		linked_list::list_head_remove(head_ptr);
+		--many_nodes;
+		++answer;
+	}
+
+	return answer;
+}
+//PRECONDITION: target deve essere presente nella bag
+//POSTCONDITION: vengono rimosse tutte le copie di target dalla bag e viene restituito il numero di copie eliminate
+
+
+
+template <class item>
+bool BAG::bag<item>::erase_one(const item& target)
+{
+	linked_list::node<item>* target_ptr;
+
+	target_ptr=linked_list::list_search(head_ptr, target);
+
+	if(target_ptr==NULL)
+		return false;
+
+	target_ptr->set_data(head_ptr->data());
+	linked_list::list_head_remove(head_ptr);
+	--many_nodes;
+
+	return true;
+}
+//PRECONDITION: target deve essere presente nella bag
+//POSTCONDITION: viene rimossa una copia di target
+
+
+
+template <class item>
+void BAG::bag<item>::insert( const item& entry)
+{
+	linked_list::list_head_insert(head_ptr, entry);
+	++many_nodes;
+}
+//POSTCONDITION: viene inserito entry nella bag
+
+
+
+template <class item>
+void BAG::bag<item>::operator +=(const BAG::bag<item>& addend)
+{
+	linked_list::node<item>* copy_head_ptr;
+	linked_list::node<item>* copy_tail_ptr;
+
+	if(addend.many_nodes > 0)
+	{
+		linked_list::list_copy(addend.head_ptr, copy_head_ptr, copy_tail_ptr);
+		copy_tail_ptr->set_link(head_ptr);
+		head_ptr=copy_head_ptr;
+
+		many_nodes+=addend.many_nodes;
+	}
+}
+//PRECONDITION: addend è una bag
+//POSTCONDITION: viene effettuata una somma tra bag
+
+
+
+template <class item>
+void BAG::bag<item>::operator =(const BAG::bag<item>& source)
+{
+	linked_list::node<item>* tail_ptr;
+
+	if(this == &source)
+		return;
+
+	linked_list::list_clear(head_ptr);
+	many_nodes=0;
+	linked_list::list_copy(source.head_ptr, head_ptr, tail_ptr);
+
+	many_nodes=source.many_nodes;
+}
+//Overload operator =
+//PRECONDITION: source è una bag
+//POSTCONDITION: viene effettuata l'operazione di assegnazione tra bag
+
+
+
+template <class item>
+BAG::bag<item> BAG::operator+(const BAG::bag<item>& b1, const BAG::bag<item>& b2)
+{
+	BAG::bag<item> answer;
+
+	answer+=b1;
+	answer+=b2;
+
+	return answer;
+}
+//PRECONDITION: b1 e b2 sono due bag
+//POSTONDITION: viene effettuata la somma tra b1 e b2
+
+
+
+template <class item>
+void BAG::bag<item>::show_items() const
+{
+	linked_list::list_print_all(head_ptr);
+}
+
+
+
+

@@ -1,0 +1,105 @@
+/*
+ * queue_implementation.template
+ *
+ *  Created on: 20 mar 2024
+ *      Author: salva
+ */
+
+
+
+
+#include "queue.h"
+#include <cassert>
+
+
+template <class item>
+queue<item>::queue()
+{
+	count=0;
+	front_ptr=NULL;
+	rear_ptr=NULL;
+}
+//CONSTRUCTOR
+
+
+template <class item>
+queue<item>::queue(const queue<item>& source)
+{
+	count=source.count;
+	linked_list::list_copy(source.front_ptr, front_ptr, rear_ptr);
+}
+//COPY CONSTRUCTOR
+
+
+
+template <class item>
+queue<item>::~queue()
+{
+	linked_list::list_clear(front_ptr);
+}
+//DESTRUCTOR
+
+
+
+template <class item>
+item queue<item>::front() const
+{
+	assert(!empty());
+	return front_ptr->data();
+}
+//PRECONDITION: la lista contiene almeno un elemento
+//POSTCONDITION: viene restituito il primo elemento della coda
+
+
+
+template <class item>
+void queue<item>::operator =(const queue<item>& source)
+{
+	if(this==&source)
+		return;
+
+	linked_list::list_clear(front_ptr);
+	linked_list::list_copy(source.front_ptr, front_ptr, rear_ptr);
+
+	count=source.count;
+}
+//Overload operatore di assegnazione
+
+
+
+template <class item>
+void queue<item>::pop()
+{
+	assert(!empty());
+
+	linked_list::list_head_remove(front_ptr);
+	--count;
+}
+//PRECONDITION: la lista contiene almento un elemento
+//POSTCONDITION: viene rimosso un elemento dalla testa della coda
+
+
+
+template <class item>
+void queue<item>::push(const item& entry)
+{
+	if(empty())  //se la coda è vuota
+	{
+		linked_list::list_head_insert(front_ptr, entry);
+		rear_ptr=front_ptr;
+	}
+
+	else  //se la coda contiene almeno un elemento
+	{
+		linked_list::list_insert(rear_ptr, entry);
+		rear_ptr=rear_ptr->link();
+	}
+
+	++count;
+}
+//POSTCONDITION: viene inserito un elemento nella coda
+
+
+
+
+

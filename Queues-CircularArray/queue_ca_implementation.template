@@ -1,0 +1,45 @@
+/*
+ * queue_ca_implementation.template
+ *
+ *  Created on: 26 set 2023
+ *      Author: salva
+ */
+
+#include <cassert>
+#include "queue_ca.h"
+
+
+template <class item>
+queue_array<item>::queue_array()
+{
+	count=0;
+	first=0;
+	last=CAPACITY-1;
+}
+
+
+template <class item>
+item queue_array<item>::front()const
+{
+	assert(!empty());
+	return data[first];
+}
+
+
+template <class item>
+void queue_array<item>::pop()
+{
+	assert(!empty());
+	first=next_index(first);
+	--count;
+}
+
+
+template <class item>
+void queue_array<item>::push(const item& entry)
+{
+	assert(size()<CAPACITY);
+	last=next_index(last);
+	data[last]=entry;
+	++count;
+}

@@ -2,7 +2,7 @@
 
 Welcome to the **Cpp** repository! Here you will find a collection of C++ programs covering various programming concepts, including object-oriented programming, data structures, and algorithms.
 
-## Repository Contents 📂
+## Repository Contents 
 
 This repository includes:
 
@@ -11,7 +11,7 @@ This repository includes:
 - **Complex Numbers and Polynomials**: Exercises to manipulate and manage these mathematical structures.
 - **Various Exercises**: Small demo programs on fundamental C++ concepts.
 
-## How to Compile and Run 🛠️
+## How to Compile and Run 
 
 If you want to compile and run a program, follow these steps:
 
@@ -26,14 +26,14 @@ If you want to compile and run a program, follow these steps:
    ./output_file
    ```
 
-## Contributions 🤝
+## Contributions 
 
 If you want to contribute to this repository:
 - **Fork** the repo.
 - Create your own **branch** for modifications.
 - Submit a **pull request** with your additions.
 
-## License 📜
+## License 
 
 This repository is distributed under the **MIT** license. Feel free to use and modify it!
 
